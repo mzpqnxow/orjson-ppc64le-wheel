@@ -1,0 +1,27 @@
+diff --git a/.cargo/config b/.cargo/config
+index 138213f..0631b98 100644
+--- a/.cargo/config
++++ b/.cargo/config
+@@ -1,5 +1,9 @@
++[lib]
++name = "orjson"
++create-type = ["dylib"]
++
+ [build]
+-rustflags = ["-Z", "mutable-noalias"]
++rustflags = []
+ 
+ [target.x86_64]
+ rustflags = ["-Z", "mutable-noalias", "-C", "target-feature=+sse2"]
+@@ -15,3 +19,10 @@ rustflags = ["-Z", "mutable-noalias", "-C", "target-feature=+sse2"]
+ 
+ [target.armv7]
+ rustflags = ["-Z", "mutable-noalias", "-C", "target-feature=+neon"]
++
++[target.ppc64le]
++rustflags = ["-Z", "mutable-noalias", "-C", "target-cpu=native"]
++
++[target.powerpc64le]
++rustflags = ["-Z", "mutable-noalias", "-C", "target-cpu=native"]
++
+

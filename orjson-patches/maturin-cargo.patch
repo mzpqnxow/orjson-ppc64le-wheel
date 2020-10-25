@@ -1,0 +1,32 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -239,11 +239,12 @@ dependencies = [
+ 
+ [[package]]
+ name = "cbindgen"
+-version = "0.14.6"
++version = "0.15.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "afa64e93023395ee316490cf013f07f753bc88d116eb1aec1bcee7d63fbcca53"
++checksum = "1df6a11bba1d7cab86c166cecf4cf8acd7d02b7b65924d81b33d27197f22ee35"
+ dependencies = [
+  "heck",
++ "indexmap",
+  "log",
+  "proc-macro2",
+  "quote",
+diff --git a/Cargo.toml b/Cargo.toml
+index 8ac6fb2..7628362 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -37,7 +37,8 @@ base64 = "0.13.0"
+ bytesize = "1.0.1"
+ glob = "0.3.0"
+ cargo_metadata = "0.11.3"
+-cbindgen = { version = "0.14.6", default-features = false }
++# cbindgen = { version = "0.14.6", default-features = false }
++cbindgen = { version = "0.15.0", default-features = false }
+ flate2 = "1.0.18"
+ goblin = "0.2.3"
+ human-panic = { version = "1.0.3", optional = true }
+

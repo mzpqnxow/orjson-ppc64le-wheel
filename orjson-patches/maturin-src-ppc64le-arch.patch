@@ -1,0 +1,72 @@
+diff --git a/ci/before_deploy.sh b/ci/before_deploy.sh
+index 15ba2c6..6a5f670 100755
+--- a/ci/before_deploy.sh
++++ b/ci/before_deploy.sh
+@@ -28,6 +28,10 @@ make_deb() {
+     i686*)
+         architecture=i386
+         ;;
++    # Let's see if this can pass the CI (probably not ...)
++    ppc64le;;
++        architecture=ppc64le
++        ;;
+     *)
+         echo "ERROR: unknown target" >&2
+         return 1
+diff --git a/setup.py b/setup.py
+index e3590d2..e8eb704 100644
+--- a/setup.py
++++ b/setup.py
+@@ -10,6 +10,7 @@
+ # for maturin itself use `maturin sdist`.
+ 
+ import os
++import platform
+ import shutil
+ import subprocess
+ import sys
+diff --git a/src/target.rs b/src/target.rs
+index 9a4bd79..5290f2f 100644
+--- a/src/target.rs
++++ b/src/target.rs
+@@ -56,6 +56,7 @@ impl FromStr for Manylinux {
+ enum Arch {
+     AARCH64,
+     ARMV7L,
++    POWERPC64,
+     X86,
+     X86_64,
+ }
+@@ -65,6 +66,7 @@ impl fmt::Display for Arch {
+         match *self {
+             Arch::AARCH64 => write!(f, "aarch64"),
+             Arch::ARMV7L => write!(f, "armv7l"),
++            Arch::POWERPC64 => write!(f, "ppc64le"),
+             Arch::X86 => write!(f, "i686"),
+             Arch::X86_64 => write!(f, "x86_64"),
+         }
+@@ -105,6 +107,7 @@ impl Target {
+             platforms::target::Arch::X86 => Arch::X86,
+             platforms::target::Arch::ARM => Arch::ARMV7L,
+             platforms::target::Arch::AARCH64 => Arch::AARCH64,
++            platforms::target::Arch::POWERPC64 => Arch::POWERPC64,
+             unsupported => bail!("The architecture {:?} is not supported", unsupported),
+         };
+ 
+@@ -134,6 +137,7 @@ impl Target {
+         match self.arch {
+             Arch::AARCH64 => 64,
+             Arch::ARMV7L => 32,
++            Arch::POWERPC64 => 64,
+             Arch::X86 => 32,
+             Arch::X86_64 => 64,
+         }
+@@ -194,6 +198,7 @@ impl Target {
+             (OS::FreeBSD, _) => "", // according imp.get_suffixes(), there are no such
+             (OS::Linux, Arch::AARCH64) => "aarch64-linux-gnu", // aka armv8-linux-gnueabihf
+             (OS::Linux, Arch::ARMV7L) => "arm-linux-gnueabihf",
++            (OS::Linux, Arch::POWERPC64) => "ppc64le-linux-gnu",
+             (OS::Linux, Arch::X86) => "i386-linux-gnu", // not i686
+             (OS::Linux, Arch::X86_64) => "x86_64-linux-gnu",
+             (OS::Macos, Arch::X86_64) => "darwin",
+
