@@ -40,6 +40,15 @@ maturin pep517 build-wheel --manylinux off
 
 Depending on what you edited in `.cargo/config`, you won't need any feature flags or anything.
 
+## Disabling features to avoid simd breakage
+
+When building `orjson`, disable `simd-accel` feature. I think the proper way to do this is:
+
+```
+target-feature=-simd-accel
+```
+
+
 ## Misc. Notes
 
 You can force a specific (pre-patched) version of `maturin` to install from a binary wheel using requirements.txt. In this example, the binary wheel in `/home/<users>/mt/` is called `maturin-0.9.0a2-cp37-cp37m-linux_ppc64le.whl`. It gets picked up as the build-time dependency
